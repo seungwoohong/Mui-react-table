@@ -1,31 +1,22 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import "./App.css";
-import Selection, { SelectionProps } from "./examples/Selection";
+import Pagination, { PaginationProps } from "./examples/Pagination/Pagination";
 import useMock from "./hooks/useMock";
 
 function App() {
-  const [selected, setSelected] = useState<number[]>([]);
-  const [sortBy, setSortBy] = useState<"asc" | "desc">("asc");
-  const { action, loading, data: mockData } = useMock();
+  const { action, data: mockData } = useMock();
 
   useEffect(() => {
-    action(sortBy !== "asc");
-  }, [sortBy]);
-
-  const handleSelect: SelectionProps["onSelect"] = useCallback(
-    (selectedIds) => {
-      setSelected(selectedIds);
-    },
-    []
-  );
-
-  const handleSort: SelectionProps["onSort"] = useCallback(() => {
-    setSortBy((prev) => (prev === "asc" ? "desc" : "asc"));
+    action();
   }, []);
 
-  const columns: SelectionProps["columns"] = useMemo(
+  const columns: PaginationProps["columns"] = useMemo(
     // coulumns must be materialized
     () => [
+      {
+        Header: "Index",
+        accessor: "id",
+      },
       {
         Header: "name",
         accessor: "name",
@@ -48,18 +39,7 @@ function App() {
 
   const data = useMemo(() => mockData, [mockData]);
 
-  return (
-    <>
-      <Selection
-        isLoading={loading}
-        onSelect={handleSelect}
-        data={data}
-        columns={columns}
-        onSort={handleSort}
-      />
-      {JSON.stringify(selected)}
-    </>
-  );
+  return <Pagination columns={columns} data={data} />;
 }
 
 export default App;
