@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import "./App.css";
-import Pagination, { PaginationProps } from "./examples/Pagination/Pagination";
+import Expading, { ExpandingProps } from "./examples/Expanding/Expanding";
 import useMock from "./hooks/useMock";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     action();
   }, []);
 
-  const columns: PaginationProps["columns"] = useMemo(
+  const columns: ExpandingProps["columns"] = useMemo(
     // coulumns must be materialized
     () => [
       {
@@ -37,9 +37,12 @@ function App() {
     []
   );
 
-  const data = useMemo(() => mockData, [mockData]);
+  const data = useMemo(
+    () => mockData.map((v) => ({ ...v, subRows: [{ ...v, subRows: [v] }, v] })),
+    [mockData]
+  );
 
-  return <Pagination columns={columns} data={data} />;
+  return <Expading columns={columns} data={data} />;
 }
 
 export default App;

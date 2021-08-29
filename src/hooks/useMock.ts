@@ -15,7 +15,7 @@ const useMock = () => {
     setLoading(true);
 
     setTimeout(() => {
-      const mock = Array(100)
+      const mock = Array(1000)
         .fill(row)
         .map((v, i) => ({ ...v, id: i + 1 }));
       setData(desc ? mock.reverse() : mock);
